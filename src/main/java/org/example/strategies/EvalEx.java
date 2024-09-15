@@ -8,7 +8,7 @@ import com.ezylang.evalex.parser.ParseException;
 public class EvalEx implements IParser{
 
     @Override
-    public Object evaluate(String expressionString) {
+    public String evaluate(String expressionString) {
         Expression expression = new Expression(expressionString);
 
         EvaluationValue result = null;
@@ -18,7 +18,7 @@ public class EvalEx implements IParser{
             throw new RuntimeException(e);
         }
 
-        return result.getNumberValue();
+        return result.getStringValue();
     }
 
     @Override
