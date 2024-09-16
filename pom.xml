@@ -32,6 +32,12 @@
             <artifactId>commons-jexl3</artifactId>
             <version>3.4.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>tk.pratanumandal</groupId>
+            <artifactId>expr4j</artifactId>
+            <version>0.0.3</version>
+        </dependency>
     </dependencies>
 
 </project>
