@@ -8,7 +8,9 @@ import java.util.Stack;
 
 public class ExpressionGenerator implements IExpressionGenerator{
     private final Random rand = new Random();
-    private final int maxDepth = 10;
+    private int minOps;
+    private int maxOps;
+    private int opNumber=0;
 
     private final String[] operatorStrings = {
             "+",
@@ -24,7 +26,10 @@ public class ExpressionGenerator implements IExpressionGenerator{
     private final Stack<String> operands = new Stack<>();
 
     public String generate(int minOperators, int maxOperators){
-        addOperator(0);
+        minOps = minOperators;
+        maxOps = maxOperators;
+        opNumber=0;
+        addOperator();
 
         StringBuilder expression = new StringBuilder();
         while(!operators.isEmpty()){
@@ -35,14 +40,17 @@ public class ExpressionGenerator implements IExpressionGenerator{
         return expression.toString();
     }
 //todo performance, dont care mert csak egyszer
-    private void addOperator(int depth){
-        if(depth == maxDepth){
+    private void addOperator(){
+        if((opNumber >= minOps && rand.nextBoolean()) || opNumber == maxOps){
+            //cut branch
             operands.push(String.valueOf(rand.nextDouble()*100000));
         }
         else {
+            //add operator
             operators.push(operatorStrings[rand.nextInt(operatorStrings.length)]);
-            addOperator(depth + 1);
-            addOperator(depth + 1);
+            opNumber++;
+            addOperator();
+            addOperator();
         }
     }
 }

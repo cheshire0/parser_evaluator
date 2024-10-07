@@ -28,7 +28,7 @@ public class SpeedTest {
 
     public void test() {
         IExpressionGenerator gen = new ExpressionGenerator();
-        String exp = gen.generate(10,20);
+        String exp = gen.generate(1,4);
         expressions= new String[]{
                 exp
         };
