@@ -1,6 +1,9 @@
 package org.example.testers;
 
 import org.example.strategies.IParser;
+import org.example.testers.generator.ExpressionGenerator;
+import org.example.testers.generator.IExpressionGenerator;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +24,14 @@ public class SpeedTest {
     };
 
     private int iterations = 10000;
+    //TODO több különböző iterationre összahasonlítani
 
     public void test() {
+        IExpressionGenerator gen = new ExpressionGenerator();
+        String exp = gen.generate(10,20);
+        expressions= new String[]{
+                exp
+        };
         for (IParser parser : parsers) {
             System.out.println("Testing parser: " + parser.getClass().getName());
             for (String expressionStr : expressions) {

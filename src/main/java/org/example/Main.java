@@ -21,5 +21,14 @@ public class Main {
     }
 }
 
-//featurök, memória, speed, hibakezelés, stabilitas
+//featurök, memória, speed, hibakezelés (pontosság), stabilitas (rossz bemenet)
 //3 parser behuzasa
+
+//parancssorból legyen futtatható, config fájl
+//belső kör (egy példány sokszor fut), külső kör (sokszor példányosítom a parsert)
+//10.000 * 1 vagy 1* 10.000
+//automatikus kimentés csv fájlokba
+
+//strategybe a különböző rugalmassági dimenziók: parserek, példák, hányszor, hogyan fut, mit értékelek ki (seb, mem...), (hova mentem ki)
+//*rugalmasság*
+//adatbázisba

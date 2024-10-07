@@ -4,28 +4,17 @@ import org.example.strategies.IParser;
 
 import java.util.ArrayList;
 
-public class MemoryTest {
-
-    private final ArrayList<IParser> parsers;
-
-    private String expressionStr = "3 * (4 + 5) + sqrt(16) / sin(10)";
+public class MemoryTest extends Test{
 
     public MemoryTest(ArrayList<IParser> parsers) {
-        this.parsers = parsers;
+        super(parsers);
+        expressions = new String[]{
+                "3 * (4 + 5) + sqrt(16) / sin(10)"
+        };
     }
 
-    public void test(){
-        for (IParser parser : parsers) {
-            System.out.println("Testing parser: " + parser.getClass().getName());
-            System.out.println("Expression: " + expressionStr);
-            System.out.println("Result: " + parser.evaluate(expressionStr));
-
-            testMemoryUse(parser);
-            System.out.println();
-        }
-    }
-
-    private void testMemoryUse(IParser parser) {
+    @Override
+    protected void testParser(IParser parser, String expression) {
 
         // Force Garbage Collection before measuring memory usage
         runGarbageCollector();
@@ -35,9 +24,10 @@ public class MemoryTest {
         System.out.println("before memory "+ beforeMemory);
 
         // Run the parser
-        runParser(expressionStr, parser);
+        runParser(expression, parser);
 
-        //runGarbageCollector();
+        //TODO külön processben, lehet nem foglal elég helyet neki -> memória kérdezgetése tőle, nagyon gyakran, ns-en belül
+        runGarbageCollector();
 
         long afterMemory = getUsedMemory();
 
@@ -53,6 +43,7 @@ public class MemoryTest {
         // Simulate parsing the expression multiple times
         for (int i = 0; i < 10000; i++) {
             String result = parser.evaluate(expressionStr);
+            //TODO expression váltogatása (nagy tömb, 10 000 elem, kicsit különböznek), parser újra inicializálva
         }
     }
 
