@@ -7,16 +7,22 @@ import java.util.Stack;
 //todo param: min max operator szám
 
 public class ExpressionGenerator implements IExpressionGenerator{
-    private final Random rand = new Random();
+    private final Random rand = new Random(42);
     private int minOps;
     private int maxOps;
     private int opNumber=0;
 
-    private final String[] operatorStrings = {
+    private final String[] binaryOperators = {
             "+",
             "-",
             "*",
-            "/"
+            //"/" expression's gotta be correct
+    };
+
+    //todo is it needed?
+    private final String[] unaryOperators = {
+            "sqrt",
+            "sin"
     };
 
     //todo gyökvonás külön pl - 0-val osztás, gyök alatt negatív -> van benne hiba?
@@ -34,7 +40,9 @@ public class ExpressionGenerator implements IExpressionGenerator{
         StringBuilder expression = new StringBuilder();
         while(!operators.isEmpty()){
             expression.append(operands.pop());
+            expression.append(" ");
             expression.append(operators.pop());
+            expression.append(" ");
         }
         expression.append(operands.pop());
         return expression.toString();
@@ -46,11 +54,23 @@ public class ExpressionGenerator implements IExpressionGenerator{
             operands.push(String.valueOf(rand.nextDouble()*100000));
         }
         else {
-            //add operator
-            operators.push(operatorStrings[rand.nextInt(operatorStrings.length)]);
-            opNumber++;
-            addOperator();
-            addOperator();
+            addBinaryOperator();
         }
+    }
+
+    private void addBinaryOperator(){
+        operators.push(binaryOperators[rand.nextInt(binaryOperators.length)]);
+        opNumber++;
+        addOperator();
+        addOperator();
+    }
+
+    //todo finish
+    private void addUnaryOperator(){
+        operators.push(unaryOperators[rand.nextInt(unaryOperators.length)]);
+        opNumber++;
+        operators.push("(");
+        operators.push(")");
+        addOperator();
     }
 }

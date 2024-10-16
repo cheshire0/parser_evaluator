@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ExpressionGeneratorTest {
 
-    private final Random rand = new Random();
+    private final Random rand = new Random(42);
     private final ExpressionGenerator gen = new ExpressionGenerator();
 
     @Test

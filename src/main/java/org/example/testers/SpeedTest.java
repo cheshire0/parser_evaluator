@@ -39,7 +39,7 @@ public class SpeedTest {
                 String error = null;
                 double result = 0.0;
                 try {
-                    result = Double.parseDouble(parser.evaluate(expressionStr));
+                    result = Double.parseDouble(parser.evaluate(expressionStr).toString());
                 } catch (Exception e) {
                     error = e.getMessage();
                 }
@@ -54,7 +54,7 @@ public class SpeedTest {
 
                     // Parse and evaluate the expression
                     try {
-                        result = Double.parseDouble(parser.evaluate(expressionStr));
+                        result = Double.parseDouble((String)parser.evaluate(expressionStr));
                     } catch (Exception ignored) {
                         //TODO if not ran properly, shouldn't "compete"
                     }

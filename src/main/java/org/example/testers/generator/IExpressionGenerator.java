@@ -8,5 +8,5 @@ import java.util.Stack;
 
 public interface IExpressionGenerator {
 
-    public String generate(int minOperators, int maxOperators);
+    String generate(int minOperators, int maxOperators);
 }
