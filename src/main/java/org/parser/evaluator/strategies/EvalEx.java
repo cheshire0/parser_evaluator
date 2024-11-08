@@ -1,9 +1,12 @@
-package org.example.strategies;
+package org.parser.evaluator.strategies;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.ParseException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EvalEx implements IParser{
 
@@ -13,7 +16,7 @@ public class EvalEx implements IParser{
 
         EvaluationValue result = null;
         try {
-            result = expression.evaluate();
+            result = expression.withValues(variables).evaluate();
         } catch (EvaluationException | ParseException e) {
             throw new RuntimeException(e);
         }
@@ -22,7 +25,7 @@ public class EvalEx implements IParser{
     }
 
     @Override
-    public void addSource(Object source) {
-
+    public String toString() {
+        return "EvalEx";
     }
 }

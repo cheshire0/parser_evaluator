@@ -1,4 +1,4 @@
-import org.example.testers.generator.ExpressionGenerator;
+import org.parser.evaluator.testers.generator.ExpressionGenerator;
 import org.junit.Test;
 
 import java.util.Random;
