@@ -33,7 +33,7 @@ public class MemoryTest extends Test{
         System.out.println("before memory "+ beforeMemory);
 
         // Run the parser
-        parser.evaluate(expression);
+        parser.evaluateWithoutVariables(expression);
 
         //todo mintavételezve külön könyvtárral
         //TODO külön processben, lehet nem foglal elég helyet neki -> memória kérdezgetése tőle, nagyon gyakran, ns-en belül

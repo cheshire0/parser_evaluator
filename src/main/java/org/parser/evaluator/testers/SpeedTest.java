@@ -46,9 +46,10 @@ public class SpeedTest extends Test{
         String error = null;
         double result = 0.0;
         try {
-            result = Double.parseDouble(parser.evaluate(expressionStr).toString());
+            result = Double.parseDouble(parser.evaluateWithoutVariables(expressionStr).toString());
         } catch (Exception e) {
             error = e.getMessage();
+            saveResultsToCSV(this, parser, "Exception - " + error);
         }
         System.out.println("Result: " + (error == null ? result : error));
 

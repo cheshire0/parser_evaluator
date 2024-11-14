@@ -20,6 +20,14 @@ public class Exp4j implements IParser{
     }
 
     @Override
+    public Object evaluateWithoutVariables(String expression) {
+        //System.out.println("before "+MemoryTest.getUsedMemory());
+        Expression e = new ExpressionBuilder(expression).build();
+        //System.out.println("after "+MemoryTest.getUsedMemory());
+        return e.evaluate();
+    }
+
+    @Override
     public String toString() {
         return "Exp4j";
     }

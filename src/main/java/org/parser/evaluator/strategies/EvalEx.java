@@ -25,6 +25,20 @@ public class EvalEx implements IParser{
     }
 
     @Override
+    public Object evaluateWithoutVariables(String expressionString) {
+        Expression expression = new Expression(expressionString);
+
+        EvaluationValue result = null;
+        try {
+            result = expression.evaluate();
+        } catch (EvaluationException | ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result.getValue();
+    }
+
+    @Override
     public String toString() {
         return "EvalEx";
     }

@@ -11,9 +11,11 @@ public interface IParser {
 
     Object evaluate(String expression);
 
+    Object evaluateWithoutVariables(String expression);
+
     default Object evaluateWithGC(String expression){
         MemoryTest.runGarbageCollector();
-        return evaluate(expression);
+        return evaluateWithoutVariables(expression);
     }
 
     default void setVariable(String name, Double variable){

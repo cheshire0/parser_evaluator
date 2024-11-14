@@ -10,6 +10,8 @@ import static org.parser.evaluator.util.MathTestUtil.toDouble;
 
 public class MathExpressionTest extends Test{
 
+    private final double E = 2.718281828459045;
+
     private final Map<String, Double> validExpressions = Map.of(
             "3 + 2 * 4 - 1", 10.0,
             "sin(0)", 0.0,
@@ -20,7 +22,8 @@ public class MathExpressionTest extends Test{
 
     //todo kijegyezni valahova, melyik működik -> adatok végül egy táblázatba
     private final Map<String, Double> logarithmicExpressions = Map.of(
-            "log(10)", 1.0,
+            "log(10)", 2.3025850929940456840179914546844, //natural
+            "log2(4)", 2.0,
             "log10(100)", 2.0,
             "ln(2.718281828459045)", 1.0,    // natural log, typically uses ln
             "lg(100)", 2.0                 // log base 10, may vary depending on parser syntax
@@ -87,6 +90,7 @@ public class MathExpressionTest extends Test{
 
     // Method to test logarithmic expressions
     private boolean testLogarithmicExpressions(IParser parser) {
+        boolean returnValue = false;
         for (Map.Entry<String, Double> entry : logarithmicExpressions.entrySet()) {
             String expression = entry.getKey();
             double expectedValue = entry.getValue();
@@ -95,16 +99,22 @@ public class MathExpressionTest extends Test{
                 if (areCloseEnough(result, expectedValue)) {
                     System.out.println("Logarithmic expression '" + expression + "' evaluated correctly.");
                     saveResultsToCSV(this, parser, "Logarithmic expression '" + expression + "' evaluated correctly.");
-                    return true;  // Test passed if one expression is evaluated correctly
+                    returnValue = true;  // Test passed if one expression is evaluated correctly
+                }
+                else{
+                    System.out.println("Logarithmic expression '" + expression + "' evaluated incorrectly. Expected value: " + expectedValue + " got value: " + result);
+                    saveResultsToCSV(this, parser, "Logarithmic expression '" + expression + "' evaluated incorrectly. Expected value: " + expectedValue + " got value: " + result);
                 }
             } catch (Exception e) {
                 System.out.println("Exception while evaluating logarithmic expression " + expression + ": " + e.getMessage());
                 saveResultsToCSV(this, parser, "Failed to evaluate logarithmic expression: " + expression);
             }
         }
-        System.out.println("No logarithmic expressions were evaluated correctly.");
-        saveResultsToCSV(this, parser, "No logarithmic expressions were evaluated correctly.");
-        return false;  // Test fails if none of the expressions are correct
+        if(!returnValue) {
+            System.out.println("No logarithmic expressions were evaluated correctly.");
+            saveResultsToCSV(this, parser, "No logarithmic expressions were evaluated correctly.");
+        }
+        return returnValue;  // Test fails if none of the expressions are correct
     }
 
     @Override

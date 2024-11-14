@@ -1,9 +1,6 @@
 package org.parser.evaluator;
 
-import org.parser.evaluator.strategies.EvalEx;
-import org.parser.evaluator.strategies.Exp4j;
-import org.parser.evaluator.strategies.Expr4j;
-import org.parser.evaluator.strategies.IParser;
+import org.parser.evaluator.strategies.*;
 import org.parser.evaluator.testers.*;
 import org.parser.evaluator.util.Orchestrator;
 
@@ -20,6 +17,8 @@ public class Main {
         parsers.add(new Exp4j());
         parsers.add(new EvalEx());
         parsers.add(new Expr4j());
+        parsers.add(new Paralithic());
+        parsers.add(new JavaMathExpressionParser());
 
         orchestrator.setParsers(parsers);
 
