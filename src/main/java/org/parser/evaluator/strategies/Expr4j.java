@@ -1,9 +1,8 @@
 package org.parser.evaluator.strategies;
 
-import in.pratanumandal.expr4j.expression.Expression;
-import in.pratanumandal.expr4j.expression.ExpressionBuilder;
-import in.pratanumandal.expr4j.expression.ExpressionConfig;
-import in.pratanumandal.expr4j.expression.ExpressionDictionary;
+import in.pratanumandal.expr4j.expression.*;
+import in.pratanumandal.expr4j.token.Function;
+import in.pratanumandal.expr4j.token.Operation;
 import in.pratanumandal.expr4j.token.Operator;
 import in.pratanumandal.expr4j.token.OperatorType;
 import tk.pratanumandal.expr4j.ExpressionEvaluator;
@@ -12,6 +11,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.parser.evaluator.util.MathTestUtil.factorial;
 
 public class Expr4j implements IParser{
 
@@ -68,8 +69,30 @@ public class Expr4j implements IParser{
             return null;
         }
     }
-    protected ExpressionDictionary<Composite> expressionDictionary;
-    protected ExpressionConfig<Composite> expressionConfig;
+
+    private ExpressionDictionary<Composite> expressionDictionary;
+    private ExpressionConfig<Composite> expressionConfig;
+
+    public Expr4j(){
+        expressionDictionary = builder.getExpressionDictionary();
+        expressionConfig = builder.getExpressionConfig();
+        expressionDictionary.addOperator(new Operator<>("+", OperatorType.INFIX, 1, (parameters) ->
+                new Composite(parameters.get(0).value().doubleValue() + parameters.get(1).value().doubleValue())));
+
+        expressionDictionary.addOperator(new Operator<>("-", OperatorType.INFIX, 1, (parameters) ->
+                new Composite(parameters.get(0).value().doubleValue() - parameters.get(1).value().doubleValue())));
+
+        expressionDictionary.addOperator(new Operator<>("*", OperatorType.INFIX, 2, (parameters) ->
+                new Composite(parameters.get(0).value().doubleValue() * parameters.get(1).value().doubleValue())));
+
+        expressionDictionary.addOperator(new Operator<>("/", OperatorType.INFIX, 2, (parameters) ->
+                new Composite(parameters.get(0).value().doubleValue() / parameters.get(1).value().doubleValue())));
+
+        expressionDictionary.addOperator(new Operator<>("^", OperatorType.INFIX, 3, (parameters) ->
+                new Composite( Math.pow(parameters.get(0).value().doubleValue(), parameters.get(1).value().doubleValue()))));
+
+    }
+
     private ExpressionBuilder<Composite> builder = new ExpressionBuilder<>(new ExpressionConfig<Composite>() {
         @Override
         protected Composite stringToOperand(String operand) {
@@ -103,42 +126,46 @@ public class Expr4j implements IParser{
     }
 
     @Override
+    public Object evaluateWithCustomFunc(String expression) {
+        Function<Composite> fact = new Function<Composite>("factorial",
+            new Operation<Composite>(){
+                @Override
+                public Composite execute(List<ExpressionParameter<Composite>> list) {
+                    return new Composite(Double.valueOf(factorial(list.get(0).value().intValue())));
+                }
+            }
+        );
+
+        expressionDictionary.addFunction(fact);
+        Expression<Composite> expr = builder.build(expression);
+        Composite res = expr.evaluate();
+        return getCompositeValue(res);
+    }
+
+    @Override
     public Object evaluate(String expression) {
 
         //version 1.0
         try {
-            expressionDictionary = builder.getExpressionDictionary();
-            expressionConfig = builder.getExpressionConfig();
-            expressionDictionary.addOperator(new Operator<>("+", OperatorType.INFIX, 1, (parameters) ->
-                    new Composite(parameters.get(0).value().doubleValue() + parameters.get(1).value().doubleValue())));
-
-            expressionDictionary.addOperator(new Operator<>("-", OperatorType.INFIX, 1, (parameters) ->
-                    new Composite(parameters.get(0).value().doubleValue() - parameters.get(1).value().doubleValue())));
-
-            expressionDictionary.addOperator(new Operator<>("*", OperatorType.INFIX, 2, (parameters) ->
-                    new Composite(parameters.get(0).value().doubleValue() * parameters.get(1).value().doubleValue())));
-
-            expressionDictionary.addOperator(new Operator<>("/", OperatorType.INFIX, 2, (parameters) ->
-                    new Composite(parameters.get(0).value().doubleValue() / parameters.get(1).value().doubleValue())));
-
-            expressionDictionary.addOperator(new Operator<>("^", OperatorType.INFIX, 3, (parameters) ->
-                    new Composite( Math.pow(parameters.get(0).value().doubleValue(), parameters.get(1).value().doubleValue()))));
-
             Expression<Composite> expr = builder.build(expression);
             Composite res = expr.evaluate(variables);
-            if (res.getType() == Type.NUMBER) {
-                return res.doubleValue() == res.intValue() ?
-                        res.intValue() :
-                        res.doubleValue();
-            } else if (res.getType() == Type.CONDITION) {
-                return res.booleanValue();
-            }
-            return null;
+            return getCompositeValue(res);
         } catch (Exception e) {
             //version 0.0.3 does not support variables afaik
             ExpressionEvaluator exprEval = new ExpressionEvaluator();
             return exprEval.evaluate(expression);
         }
+    }
+
+    private Object getCompositeValue(Composite res) {
+        if (res.getType() == Type.NUMBER) {
+            return res.doubleValue() == res.intValue() ?
+                    res.intValue() :
+                    res.doubleValue();
+        } else if (res.getType() == Type.CONDITION) {
+            return res.booleanValue();
+        }
+        return null;
     }
 
     @Override

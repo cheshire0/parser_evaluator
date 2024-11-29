@@ -1,7 +1,6 @@
 package org.parser.evaluator.strategies;
 
 import com.expression.parser.Parser;
-import com.expression.parser.util.Point;
 
 public class JavaMathExpressionParser implements IParser{
     @Override
@@ -14,6 +13,11 @@ public class JavaMathExpressionParser implements IParser{
     @Override
     public Object evaluateWithoutVariables(String expression) {
         return Parser.simpleEval(expression);
+    }
+
+    @Override
+    public Object evaluateWithCustomFunc(String expression) {
+        return null;
     }
 
     @Override

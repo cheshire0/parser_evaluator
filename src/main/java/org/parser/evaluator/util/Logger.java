@@ -37,12 +37,33 @@ public final class Logger {
         }
     }
 
+    //specific tests
+    public static void saveResultsToCSV(String test, IParser parser, Object result) {
+        try (FileWriter writer = new FileWriter(file, true)) {
+            writer.write(test + "; "
+                    + parser.toString() + "; "
+                    + result.toString() + "; "
+                    + getCurrentTimeString("yyyy-MM-dd HH:mm:ss") + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     //save results to a CSV file
     public static void saveResultsToCSV(List<Object> results) {
         try (FileWriter writer = new FileWriter(file)) {
             for (Object result : results) {
                 writer.write(result.toString() + "\n");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //custom message
+    public static void saveResultsToCSV(String message) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(message + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }

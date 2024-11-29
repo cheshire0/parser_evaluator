@@ -13,6 +13,8 @@ public interface IParser {
 
     Object evaluateWithoutVariables(String expression);
 
+    Object evaluateWithCustomFunc(String expression);
+
     default Object evaluateWithGC(String expression){
         MemoryTest.runGarbageCollector();
         return evaluateWithoutVariables(expression);

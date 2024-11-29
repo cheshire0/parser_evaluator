@@ -28,5 +28,13 @@ public class MathTestUtil {
             throw new IllegalArgumentException("Unsupported type for conversion to double: " + obj.getClass().getName());
         }
     }
+
+    public static long factorial(double n) {
+        long fact = 1;
+        for (int i = 2; i < n+1; i++) {
+            fact = fact * i;
+        }
+        return fact;
+    }
 }
 

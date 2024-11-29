@@ -1,16 +1,10 @@
 package org.parser.evaluator.testers.generator;
 
 import java.util.Random;
-import java.util.Stack;
-
-//todo interface-be és ne legyen static
-//todo param: min max operator szám
 
 public class ExpressionGenerator implements IExpressionGenerator{
     private final Random rand = new Random(42);
-    private int minOps;
-    private int maxOps;
-    private int opNumber=0;
+    public int chance = 60;
 
     private final String[] binaryOperators = {
             "+",
@@ -21,56 +15,52 @@ public class ExpressionGenerator implements IExpressionGenerator{
 
     //todo is it needed?
     private final String[] unaryOperators = {
-            "sqrt",
+            "cos",
             "sin"
     };
 
-    //todo gyökvonás külön pl - 0-val osztás, gyök alatt negatív -> van benne hiba?
-    //todo kézzel egy nagyon hosszú query és abban cserélgetek -> összehas?
-
-    private final Stack<String> operators = new Stack<>();
-    private final Stack<String> operands = new Stack<>();
-
-    public String generate(int minOperators, int maxOperators){
-        minOps = minOperators;
-        maxOps = maxOperators;
-        opNumber=0;
-        addOperator();
-
+    public String generate(int opNumber){
         StringBuilder expression = new StringBuilder();
-        while(!operators.isEmpty()){
-            expression.append(operands.pop());
-            expression.append(" ");
-            expression.append(operators.pop());
-            expression.append(" ");
+
+        expression.append(rand.nextDouble()*1000);
+
+        for(int i=0; i<opNumber; i++){
+            expression.append(addBinaryOperator());
         }
-        expression.append(operands.pop());
+
         return expression.toString();
     }
-//todo performance, dont care mert csak egyszer
-    private void addOperator(){
-        if((opNumber >= minOps && rand.nextBoolean()) || opNumber == maxOps){
-            //cut branch
-            operands.push(String.valueOf(rand.nextDouble()*100000));
+
+    public String addOperand(){
+        if(rand.nextInt(100)<chance){
+            return String.valueOf(rand.nextDouble()*1000);
         }
         else {
-            addBinaryOperator();
+            return addUnaryOperator();
         }
     }
 
-    private void addBinaryOperator(){
-        operators.push(binaryOperators[rand.nextInt(binaryOperators.length)]);
-        opNumber++;
-        addOperator();
-        addOperator();
+    public String addBinaryOperator(){
+        StringBuilder operand= new StringBuilder();
+
+        operand.append(" ");
+        operand.append(binaryOperators[rand.nextInt(binaryOperators.length)]);
+        operand.append(" ");
+        operand.append(addOperand());
+
+        return operand.toString();
     }
 
-    //todo finish
-    private void addUnaryOperator(){
-        operators.push(unaryOperators[rand.nextInt(unaryOperators.length)]);
-        opNumber++;
-        operators.push("(");
-        operators.push(")");
-        addOperator();
+    public String addUnaryOperator(){
+        StringBuilder operand= new StringBuilder();
+        operand.append(unaryOperators[rand.nextInt(unaryOperators.length)]);
+        operand.append("(");
+        operand.append(rand.nextDouble()*1000);
+        operand.append(")");
+        return operand.toString();
+    }
+
+    public void setChance(int chance) {
+        this.chance = chance;
     }
 }

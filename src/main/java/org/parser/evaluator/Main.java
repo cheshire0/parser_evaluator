@@ -1,16 +1,17 @@
 package org.parser.evaluator;
 
 import org.parser.evaluator.strategies.*;
+import org.parser.evaluator.strategies.evalex.EvalEx;
 import org.parser.evaluator.testers.*;
 import org.parser.evaluator.util.Orchestrator;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.parser.evaluator.util.Logger.saveResultsToCSV;
 
 public class Main {
     public static void main(String[] args) {
+
         Orchestrator orchestrator = new Orchestrator();
 
         ArrayList<IParser> parsers = new ArrayList<>();
@@ -19,6 +20,7 @@ public class Main {
         parsers.add(new Expr4j());
         parsers.add(new Paralithic());
         parsers.add(new JavaMathExpressionParser());
+        parsers.add(new Javaluator());
 
         orchestrator.setParsers(parsers);
 
@@ -28,9 +30,10 @@ public class Main {
         orchestrator.addTest(new MemoryTest());
         orchestrator.addTest(new MathExpressionTest());
         orchestrator.addTest(new VariableTest());
+        orchestrator.addTest(new CustomFuncTest());
 
         // Run all tests
-        List<Object> results = orchestrator.runTests();
+        orchestrator.runTests();
     }
 }
 
