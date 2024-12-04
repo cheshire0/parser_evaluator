@@ -14,9 +14,10 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-
+        // Set up the OutputHandler to manage the test results output (console, CSV, and table)
         OutputHandler.setConfig(true, true, true);
 
+        // Create an instance of Orchestrator to manage the execution of tests
         Orchestrator orchestrator = new Orchestrator();
 
         ArrayList<IParser> parsers = new ArrayList<>();
