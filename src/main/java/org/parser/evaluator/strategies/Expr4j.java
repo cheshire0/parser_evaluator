@@ -2,7 +2,6 @@ package org.parser.evaluator.strategies;
 
 import in.pratanumandal.expr4j.expression.*;
 import in.pratanumandal.expr4j.token.Function;
-import in.pratanumandal.expr4j.token.Operation;
 import in.pratanumandal.expr4j.token.Operator;
 import in.pratanumandal.expr4j.token.OperatorType;
 import tk.pratanumandal.expr4j.ExpressionEvaluator;
@@ -12,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.parser.evaluator.util.MathTestUtil.factorial;
+import static org.parser.evaluator.util.test.MathTestUtil.factorial;
 
 public class Expr4j implements IParser{
 
@@ -127,16 +126,14 @@ public class Expr4j implements IParser{
 
     @Override
     public Object evaluateWithCustomFunc(String expression) {
-        Function<Composite> fact = new Function<Composite>("factorial",
-            new Operation<Composite>(){
-                @Override
-                public Composite execute(List<ExpressionParameter<Composite>> list) {
-                    return new Composite(Double.valueOf(factorial(list.get(0).value().intValue())));
-                }
-            }
+        Function<Composite> fact = new Function<>("factorial",
+                list -> new Composite(Double.valueOf(factorial(list.get(0).value().intValue())))
         );
 
         expressionDictionary.addFunction(fact);
+        expressionDictionary.addOperator(new Operator<>("!", OperatorType.POSTFIX, 4, (parameters) ->
+                new Composite(Double.valueOf(factorial(parameters.get(0).value().intValue())))));
+
         Expression<Composite> expr = builder.build(expression);
         Composite res = expr.evaluate();
         return getCompositeValue(res);

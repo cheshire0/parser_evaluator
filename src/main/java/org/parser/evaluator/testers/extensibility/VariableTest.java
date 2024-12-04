@@ -1,10 +1,13 @@
-package org.parser.evaluator.testers;
+package org.parser.evaluator.testers.extensibility;
 
 import org.parser.evaluator.strategies.IParser;
+import org.parser.evaluator.testers.Test;
+import org.parser.evaluator.util.log.report.LogContext;
+import org.parser.evaluator.util.log.OutputHandler;
+
 import java.util.Map;
-import static org.parser.evaluator.util.Logger.saveResultsToCSV;
-import static org.parser.evaluator.util.MathTestUtil.areCloseEnough;
-import static org.parser.evaluator.util.MathTestUtil.toDouble;
+import static org.parser.evaluator.util.test.MathTestUtil.areCloseEnough;
+import static org.parser.evaluator.util.test.MathTestUtil.toDouble;
 
 public class VariableTest extends Test {
 
@@ -26,20 +29,19 @@ public class VariableTest extends Test {
 
             // Evaluate the expression
             double result = toDouble(parser.evaluate(expression));
-            System.out.println("Expression '" + expression + "' with variables evaluated to: " + result);
 
             // Check if the result is close enough to the expected value
             if (areCloseEnough(result, testCase.expectedValue)) {
                 testPassed = true;
-                System.out.println("Variable expression '" + expression + "' evaluated correctly.");
-                saveResultsToCSV(this, parser, "Variable expression '" + expression + "' evaluated correctly.");
+                OutputHandler.log(new LogContext(this, parser, expression,"evaluated correctly"));
+
             } else {
-                System.out.println("Variable expression '" + expression + "' did not evaluate as expected.");
-                saveResultsToCSV(this, parser, "Variable expression '" + expression + "' evaluated incorrectly.");
+                OutputHandler.log(new LogContext(this, parser, expression, "evaluated incorrectly"));
+
             }
         } catch (Exception e) {
-            System.out.println("Exception while evaluating variable expression '" + expression + "': " + e.getMessage());
-            saveResultsToCSV(this, parser, "Failed to evaluate variable expression: " + expression);
+            OutputHandler.log(new LogContext(this, parser, expression,"failed to evaluate"));
+
         }
         return testPassed;
     }
@@ -57,7 +59,8 @@ public class VariableTest extends Test {
 
     // Main testing method
     @Override
-    protected Object testParser(IParser parser) {
+    public Object testParser(IParser parser) {
+        OutputHandler.log("Testing parser: " + parser);
         int numberOfTests = variableExpressions.size();
         double passedTests = 0;
 
@@ -72,8 +75,8 @@ public class VariableTest extends Test {
 
         // Summary of passed tests
         double percentagePassed = (passedTests / numberOfTests) * 100;
-        System.out.println(String.format("%.2f", percentagePassed) + "% of tests passed");
-        saveResultsToCSV(this, parser, String.format("%.2f", percentagePassed) + "% of tested expressions got correctly parsed.");
+        OutputHandler.log(String.format("%.2f", percentagePassed) + "% of tested expressions got correctly parsed.");
+
         return passedTests / numberOfTests;
     }
 

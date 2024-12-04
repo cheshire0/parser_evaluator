@@ -8,7 +8,7 @@ import com.dfsek.paralithic.functions.Function;
 import com.dfsek.paralithic.functions.natives.NativeFunction;
 import com.dfsek.paralithic.node.Statefulness;
 import org.jetbrains.annotations.NotNull;
-import org.parser.evaluator.util.MathTestUtil;
+import org.parser.evaluator.util.test.MathTestUtil;
 
 import java.lang.reflect.Method;
 

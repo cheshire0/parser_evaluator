@@ -1,9 +1,12 @@
-package org.parser.evaluator.testers;
+package org.parser.evaluator.testers.mathematical;
 
 import org.parser.evaluator.strategies.IParser;
+import org.parser.evaluator.testers.Test;
+import org.parser.evaluator.util.log.OutputHandler;
+import org.parser.evaluator.util.log.report.LogContext;
+
 import java.util.ArrayList;
 import java.util.List;
-import static org.parser.evaluator.util.Logger.saveResultsToCSV;
 
 public class DataTypeTest extends Test {
 
@@ -13,30 +16,30 @@ public class DataTypeTest extends Test {
 
     private boolean testType(IParser parser, String expressionStr) {
         try {
-            System.out.println("Testing expression: " + expressionStr);
+            OutputHandler.log("Testing expression: " + expressionStr);
             Object result = parser.evaluate(expressionStr);
 
-            System.out.println("Parsed result: " + result.toString());
+            OutputHandler.log("Parsed result: " + result.toString());
 
             return checkDataType(parser, result, expressionStr);
 
         } catch (Exception e) {
-            System.out.println("Parser "+parser.getClass().getSimpleName()+" failed for expression: " + expressionStr);
+            OutputHandler.log("Parser "+parser.getClass().getSimpleName()+" failed for expression: " + expressionStr);
             return false;
         }
     }
 
     private void printOutput(Object result, Boolean condition, String type) {
         if (condition) {
-            System.out.println("Success: Expression is parsed as a(n) "+type+".");
+            OutputHandler.log("Success: Expression is parsed as a(n) "+type+".");
         } else {
-            System.out.println("Error: Expected "+type+", but got " + result.getClass().getSimpleName());
+            OutputHandler.log("Error: Expected "+type+", but got " + result.getClass().getSimpleName());
         }
     }
 
     private boolean evaluateForType(IParser parser, Class<?> type, Object result) {
         boolean success = type.isInstance(result);
-        saveResultsToCSV(this, parser, type.getSimpleName() + " type " + (success? "correctly parsed.":"incorrectly parsed."));
+        OutputHandler.log(new LogContext(this, parser, type.getSimpleName() + " type ", (success? "correctly parsed":"incorrectly parsed")));
         printOutput(result, success, type.getSimpleName());
         return success;
     }
@@ -60,14 +63,14 @@ public class DataTypeTest extends Test {
             
         } else {
             // Additional cases for other types
-            System.out.println("Error: Unsupported data type or invalid expression.");
+            OutputHandler.log("Error: Unsupported data type or invalid expression.");
         }
 
         return success;
     }
 
     @Override
-    protected Object testParser(IParser parser) {
+    public Object testParser(IParser parser) {
         List<Boolean> results = new ArrayList<>();
         for(String expression : expressions) {
             results.add(testType(parser, expression));
@@ -76,7 +79,7 @@ public class DataTypeTest extends Test {
         for (Boolean result : results) {
             if(result) numberOfTrue++;
         }
-        saveResultsToCSV(this, parser, String.format("%.2f", numberOfTrue/results.size() * 100) + "% of tested data types got correctly parsed.");
+        OutputHandler.log(new LogContext(this, parser, "% of tested data types got correctly parsed", String.format("%.2f", numberOfTrue/results.size() * 100) ));
         return numberOfTrue/results.size();
     }
 

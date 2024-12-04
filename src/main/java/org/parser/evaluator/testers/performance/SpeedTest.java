@@ -1,18 +1,15 @@
-package org.parser.evaluator.testers;
+package org.parser.evaluator.testers.performance;
 
 import org.parser.evaluator.strategies.IParser;
+import org.parser.evaluator.testers.Test;
 import org.parser.evaluator.testers.generator.ExpressionGenerator;
 import org.parser.evaluator.testers.generator.IExpressionGenerator;
+import org.parser.evaluator.util.log.OutputHandler;
+import org.parser.evaluator.util.log.report.LogContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
-import static org.parser.evaluator.util.Logger.saveResultsToCSV;
-
-public class SpeedTest extends Test{
+public class SpeedTest extends Test {
 
     private int iterations = 100;
 
@@ -33,13 +30,18 @@ public class SpeedTest extends Test{
         expr= generator.generate(1000);
         expressions.put(expr,1000);
 
-        saveResultsToCSV("Speed Test - iteration number: "+iterations);
+        expressions = new LinkedHashMap<>();
+        expressions.put(generator.generate(5),5);
+        expressions.put(generator.generate(20),20);
+        expressions.put(generator.generate(100),100);
+        expressions.put(generator.generate(500),500);
+        expressions.put(generator.generate(2500),2500);
+        OutputHandler.log("Speed Test - iteration number: "+iterations);
+
     }
 
-    //TODO több különböző iterationre összahasonlítani
-
     @Override
-    protected Object testParser(IParser parser){
+    public Object testParser(IParser parser){
         List<Double> results = new ArrayList<>();
         for(Map.Entry<String, Integer> entry : expressions.entrySet()){
             String expr = entry.getKey();
@@ -55,7 +57,7 @@ public class SpeedTest extends Test{
         for(Double result : results){
             average += result;
         }
-        saveResultsToCSV(this+" average for all tested expr", parser,  average/ results.size());
+        OutputHandler.log(new LogContext(this, parser, "average for all tested expr", average/ results.size()));
         return average/results.size();
     }
 
@@ -65,7 +67,6 @@ public class SpeedTest extends Test{
     }
 
     private double testSpeed(IParser parser, String expressionStr, int length) {
-        System.out.println("Testing parser: " + parser.getClass().getName());
 
         warmUp(expressionStr, parser);
 
@@ -78,8 +79,7 @@ public class SpeedTest extends Test{
             try {
                 parser.evaluateWithoutVariables(expressionStr);
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-                saveResultsToCSV(this+" for expression of size: "+length, parser, "Error: " + e.getMessage());
+                OutputHandler.log(new LogContext(this, parser, "expression of size " + length, "error: "+e.getMessage()));
                 return -1;
             }
 
@@ -89,13 +89,8 @@ public class SpeedTest extends Test{
 
         // Calculate average time per iteration
         double averageTimeNs = totalTime / (double) iterations;
-        double averageTimeMs = TimeUnit.NANOSECONDS.toMillis((long) averageTimeNs);
 
-        String testName = this+" for expr: "+expressionStr;
-        if(length > 10) testName = this+" for expr of size: "+length;
-        saveResultsToCSV(testName+", (ns)", parser, averageTimeNs);
-
-        System.out.println("Average time: " + averageTimeNs + " ns (" + averageTimeMs + " ms)"+" for expression of size: "+length);
+        OutputHandler.log(new LogContext(this, parser, "average time (ns) for expression of size: " + length, averageTimeNs));
 
         return averageTimeNs;
     }

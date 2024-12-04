@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Test {
-    //TODO for the sake of readability
+    protected boolean systemOutput =  true;
+
     protected final ArrayList<IParser> parsers = new ArrayList<>();
 
     protected List<String> expressions;
@@ -14,6 +15,10 @@ public abstract class Test {
     public void setParsers(List<IParser> parsers) {
         this.parsers.clear();
         this.parsers.addAll(parsers);
+    }
+
+    public void setSystemOutput(boolean systemOutput) {
+        this.systemOutput = systemOutput;
     }
 
     protected List<IParser> getParsers() {
@@ -33,6 +38,6 @@ public abstract class Test {
         return results;
     }
 
-    protected abstract Object testParser(IParser parser);
+    public abstract Object testParser(IParser parser);
     public abstract String toString();
 }

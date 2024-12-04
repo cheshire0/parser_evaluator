@@ -6,7 +6,7 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-import static org.parser.evaluator.util.MathTestUtil.factorial;
+import static org.parser.evaluator.util.test.MathTestUtil.factorial;
 
 @FunctionParameter(name = "value")
 public class FactorialFunction extends AbstractFunction {

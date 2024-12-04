@@ -44,7 +44,10 @@ public class EvalEx implements IParser {
         ExpressionConfiguration configuration =
                 ExpressionConfiguration.defaultConfiguration()
                         .withAdditionalFunctions(
-                                Map.entry("factorial", new FactorialFunction()));
+                                Map.entry("factorial", new FactorialFunction()))
+                        .withAdditionalOperators(
+                                Map.entry("!", new FactorialOperator())
+                        );
         Expression expr = new Expression(expression, configuration);
         EvaluationValue result = null;
         try {

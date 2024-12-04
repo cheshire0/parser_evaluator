@@ -1,14 +1,16 @@
-package org.parser.evaluator.testers;
+package org.parser.evaluator.testers.mathematical;
 
 import org.parser.evaluator.strategies.IParser;
+import org.parser.evaluator.testers.Test;
+import org.parser.evaluator.util.log.report.LogContext;
+import org.parser.evaluator.util.log.OutputHandler;
 
 import java.util.Map;
 
-import static org.parser.evaluator.util.Logger.saveResultsToCSV;
-import static org.parser.evaluator.util.MathTestUtil.areCloseEnough;
-import static org.parser.evaluator.util.MathTestUtil.toDouble;
+import static org.parser.evaluator.util.test.MathTestUtil.areCloseEnough;
+import static org.parser.evaluator.util.test.MathTestUtil.toDouble;
 
-public class MathExpressionTest extends Test{
+public class MathExpressionTest extends Test {
 
     private final double E = 2.718281828459045;
 
@@ -20,7 +22,6 @@ public class MathExpressionTest extends Test{
             "2 * (3 + 5)", 16.0
     );
 
-    //todo kijegyezni valahova, melyik működik -> adatok végül egy táblázatba
     private final Map<String, Double> logarithmicExpressions = Map.of(
             "log(10)", 2.3025850929940456840179914546844, //natural
             "log2(4)", 2.0,
@@ -35,7 +36,7 @@ public class MathExpressionTest extends Test{
     );
 
     @Override
-    protected Object testParser(IParser parser) {
+    public Object testParser(IParser parser) {
         int numberOfTests = validExpressions.size() + 1 + invalidExpressions.size();
         double passedTests = 0;
 
@@ -48,19 +49,19 @@ public class MathExpressionTest extends Test{
             try {
                 result = toDouble(parser.evaluate(expression));
             } catch (Exception exception) {
-                System.out.println("Exception while evaluating " + expression + ": " + exception.getMessage());
-                saveResultsToCSV(this, parser, "Failed to evaluate expression: " + expression);
+
+                OutputHandler.log(new LogContext(this, parser, expression,"failed to evaluate"));
+
                 continue;  // Skip to the next test if there's an exception
             }
-
-            System.out.println(expression + " = " + result);
-            saveResultsToCSV(this, parser, expression + " got parsed as: " + result);
+            OutputHandler.log(new LogContext(this, parser, expression, result));
 
             if(areCloseEnough(result, value)){
                 passedTests++;
-                System.out.println("Correctly evaluated");
+                OutputHandler.log("Correctly evaluated");
+
             }
-            else System.out.println("Incorrectly evaluated");
+            else OutputHandler.log("Incorrectly evaluated");
         }
 
         // Test log
@@ -73,18 +74,18 @@ public class MathExpressionTest extends Test{
 
             try {
                 parser.evaluate(expression);
-                System.out.println("Error: Expression '" + expression + "' did not throw an exception as expected.");
-                saveResultsToCSV(this, parser, "Failed test - expected exception not thrown for: " + expression);
+                OutputHandler.log(new LogContext(this, parser,expression, "failed test - expected exception not thrown"));
+
             } catch (Exception e) {
                 passedTests++;
-                System.out.println("Correctly threw " + expectedException.getSimpleName() + " for expression: " + expression);
-                saveResultsToCSV(this, parser, "Correctly threw " + expectedException.getSimpleName() + " for expression: " + expression);
+                OutputHandler.log(new LogContext(this, parser, expression, "Correctly threw " + expectedException.getSimpleName()));
+
             }
         }
 
         double percentagePassed = (passedTests / numberOfTests) * 100;
-        System.out.println(String.format("%.2f", percentagePassed) + "% of tests passed");
-        saveResultsToCSV(this, parser, String.format("%.2f", percentagePassed) + "% of tested expressions got correctly parsed.");
+        OutputHandler.log(String.format("%.2f", percentagePassed) + "% of tested expressions got correctly parsed.");
+
         return passedTests / numberOfTests;
     }
 
@@ -97,22 +98,19 @@ public class MathExpressionTest extends Test{
             try {
                 double result = toDouble(parser.evaluate(expression));
                 if (areCloseEnough(result, expectedValue)) {
-                    System.out.println("Logarithmic expression '" + expression + "' evaluated correctly.");
-                    saveResultsToCSV(this, parser, "Logarithmic expression '" + expression + "' evaluated correctly.");
+                    OutputHandler.log(new LogContext(this, parser, expression, "evaluated correctly"));
                     returnValue = true;  // Test passed if one expression is evaluated correctly
                 }
                 else{
-                    System.out.println("Logarithmic expression '" + expression + "' evaluated incorrectly. Expected value: " + expectedValue + " got value: " + result);
-                    saveResultsToCSV(this, parser, "Logarithmic expression '" + expression + "' evaluated incorrectly. Expected value: " + expectedValue + " got value: " + result);
+                    OutputHandler.log(new LogContext(this, parser, expression,"evaluated incorrectly, expected value: " + expectedValue + " got value: " + result));
                 }
+
             } catch (Exception e) {
-                System.out.println("Exception while evaluating logarithmic expression " + expression + ": " + e.getMessage());
-                saveResultsToCSV(this, parser, "Failed to evaluate logarithmic expression: " + expression);
+                OutputHandler.log(new LogContext(this, parser, expression, "failed to evaluate"));
             }
         }
         if(!returnValue) {
-            System.out.println("No logarithmic expressions were evaluated correctly.");
-            saveResultsToCSV(this, parser, "No logarithmic expressions were evaluated correctly.");
+            OutputHandler.log(new LogContext(this, parser, "logarithmic expressions","none were evaluated correctly"));
         }
         return returnValue;  // Test fails if none of the expressions are correct
     }

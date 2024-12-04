@@ -1,4 +1,4 @@
-package org.parser.evaluator.util;
+package org.parser.evaluator;
 
 import org.parser.evaluator.strategies.IParser;
 import org.parser.evaluator.testers.Test;
@@ -24,14 +24,15 @@ public class Orchestrator {
     }
 
     //run all strategies and collect results
-    public List<Object> runTests() {
-        List<Object> results = new ArrayList<>();
+    public void runTests() {
+
         for (Test test : tests) {
-            results.add(test.toString());
+
+            //system output
             test.setParsers(parsers);
-            results.add(test.test());
+            test.test();
+
         }
-        return results;
     }
 
 }

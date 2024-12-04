@@ -3,11 +3,9 @@ package org.parser.evaluator.strategies;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
+import net.objecthunter.exp4j.operator.Operator;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.parser.evaluator.util.MathTestUtil.factorial;
+import static org.parser.evaluator.util.test.MathTestUtil.factorial;
 
 public class Exp4j implements IParser{
 
@@ -39,8 +37,17 @@ public class Exp4j implements IParser{
                 return factorial((int) args[0]);
             }
         };
+
+        Operator operator = new Operator("!", 1, true, 10001) {
+            @Override
+            public double apply(double... args) {
+                return factorial((int) args[0]);
+            }
+        };
+
         return new ExpressionBuilder(expression)
                 .function(fact)
+                .operator(operator)
                 .build()
                 .evaluate();
     }

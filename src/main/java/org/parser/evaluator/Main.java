@@ -2,15 +2,20 @@ package org.parser.evaluator;
 
 import org.parser.evaluator.strategies.*;
 import org.parser.evaluator.strategies.evalex.EvalEx;
-import org.parser.evaluator.testers.*;
-import org.parser.evaluator.util.Orchestrator;
+import org.parser.evaluator.testers.extensibility.ExtensibilityTest;
+import org.parser.evaluator.testers.extensibility.VariableTest;
+import org.parser.evaluator.testers.mathematical.DataTypeTest;
+import org.parser.evaluator.testers.mathematical.MathExpressionTest;
+import org.parser.evaluator.testers.performance.MemoryTest;
+import org.parser.evaluator.testers.performance.SpeedTest;
+import org.parser.evaluator.util.log.OutputHandler;
 
 import java.util.ArrayList;
 
-import static org.parser.evaluator.util.Logger.saveResultsToCSV;
-
 public class Main {
     public static void main(String[] args) {
+
+        OutputHandler.setConfig(true, true, true);
 
         Orchestrator orchestrator = new Orchestrator();
 
@@ -30,21 +35,9 @@ public class Main {
         orchestrator.addTest(new MemoryTest());
         orchestrator.addTest(new MathExpressionTest());
         orchestrator.addTest(new VariableTest());
-        orchestrator.addTest(new CustomFuncTest());
+        orchestrator.addTest(new ExtensibilityTest());
 
         // Run all tests
         orchestrator.runTests();
     }
 }
-
-//featurök, memória, speed, hibakezelés (pontosság), stabilitas (rossz bemenet)
-//3 parser behuzasa
-
-//parancssorból legyen futtatható, config fájl
-//belső kör (egy példány sokszor fut), külső kör (sokszor példányosítom a parsert)
-//10.000 * 1 vagy 1* 10.000
-//automatikus kimentés csv fájlokba
-
-//strategybe a különböző rugalmassági dimenziók: parserek, példák, hányszor, hogyan fut, mit értékelek ki (seb, mem...), (hova mentem ki)
-//*rugalmasság*
-//adatbázisba

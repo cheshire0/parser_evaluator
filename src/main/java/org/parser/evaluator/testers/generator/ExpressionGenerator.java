@@ -13,7 +13,6 @@ public class ExpressionGenerator implements IExpressionGenerator{
             //"/" expression's gotta be correct
     };
 
-    //todo is it needed?
     private final String[] unaryOperators = {
             "cos",
             "sin"
@@ -42,12 +41,10 @@ public class ExpressionGenerator implements IExpressionGenerator{
 
     public String addBinaryOperator(){
         StringBuilder operand= new StringBuilder();
-
         operand.append(" ");
         operand.append(binaryOperators[rand.nextInt(binaryOperators.length)]);
         operand.append(" ");
         operand.append(addOperand());
-
         return operand.toString();
     }
 

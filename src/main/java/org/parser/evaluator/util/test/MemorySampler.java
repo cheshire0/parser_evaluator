@@ -1,6 +1,4 @@
-package org.parser.evaluator.util;
-
-import org.parser.evaluator.testers.MemoryTest;
+package org.parser.evaluator.util.test;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -20,13 +18,7 @@ public class MemorySampler implements Runnable {
 
             long currentMemory = heapMemoryUsage.getUsed();
             maxMemoryUsed = Math.max(maxMemoryUsed, currentMemory);
-            /*
-            try {
-                Thread.sleep(1); // Sample every 1ms
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            */
+
             busySleep(10);
         }
     }
