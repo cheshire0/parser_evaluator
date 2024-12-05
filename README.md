@@ -23,7 +23,8 @@ The project evaluates at least three popular Java libraries for parsing and eval
 - **EvalEx**  
 - **Expr4j**  
 - **JavaMathExpressionParser**  
-- **Paralithic**  
+- **Paralithic**
+- **Javaluator** 
 ---
 
 ## **Key Features of the Comparison Framework**
@@ -39,31 +40,43 @@ The framework evaluates libraries based on the following attributes:
 The framework provides recommendations tailored to specific scenarios, such as:  
 - **Performance-Oriented Tasks**: Selecting the fastest library for real-time evaluations.  
 - **Customization Needs**: Identifying libraries that support user-defined operators or functions.  
-- **Developer-Friendliness**: Recommending tools suitable for developers with minimal prior experience in formula parsing.
+- **Correctness of Evaluation**: Recommending tools suitable for developers with minimal prior experience in formula parsing.
+
+---
+
+Here’s a revised and polished version of the **Getting Started** section:
 
 ---
 
 ## **Getting Started**
-To run the comparison framework and analyze the libraries:  
 
-1. **Clone this repository**:  
-   ```bash
-   git clone https://github.com/your-username/parsing-math-formulae-java.git
-   cd parsing-math-formulae-java
-   ```
+### Setting Up the Project
+1. **External Libraries**:  
+   This project uses three external libraries that were not imported through Maven, their `.jar` files are included in the `lib` folder.  
+   - You will need to manually add these `.jar` files to your project’s classpath to run the application.  
+     - In IntelliJ IDEA:  
+       1. Go to **File > Project Structure > Libraries**.  
+       2. Click **+** and add the `.jar` files from the `lib` folder.  
+     - In Eclipse:  
+       1. Right-click the project in the Package Explorer.  
+       2. Navigate to **Build Path > Add External Archives**, and select the `.jar` files.
 
-2. **Build the project using Maven**:  
-   ```bash
-   mvn clean install
-   ```
+2. **Configuring the Program**:  
+   The program execution is controlled from the `Main.java` file. Here, you can:
+   - **Select Tests**: Comment out any unwanted test cases or parsing libraries that you do not wish to execute.
+   - Example:
+     ```java
+     // Comment out the unwanted tests
+     orchestrator.addTest(new SpeedTest());
+     orchestrator.addTest(new DataTypeTest());
+     ```
 
-3. **Run the framework**:  
-   ```bash
-   java -jar target/comparison-framework.jar
-   ```
-
-4. **View Results**:  
-   The output will include performance metrics, usability assessments, and overall recommendations for each library.
+3. **Customizing Output**:  
+   The output behavior can be configured using the `OutputHandler` class.  
+   - Modify the line `OutputHandler.setConfig(true, true, true);` in `Main.java` to enable or disable specific output methods:
+     - **First Argument**: Enable/disable console output.
+     - **Second Argument**: Enable/disable file logging.
+     - **Third Argument**: Enable/disable data reporting filtered by test.
 
 ---
 
@@ -72,31 +85,49 @@ To run the comparison framework and analyze the libraries:
 src/
 ├── main/
 │   ├── java/
-│   │   ├── org.parser.evaluator/
-│   │   │   ├── strategies/           # Library-specific parsers and evaluators
-│   │   │   │   ├── EvalEx/
-│   │   │   │   ├── Exp4j/
-│   │   │   │   ├── Expr4j/
-│   │   │   │   ├── JavaMathExpressionParser/
-│   │   │   │   ├── Paralithic/
-│   │   │   │   └── IParser.java      # Interface for parser strategies
-│   │   │   ├── testers/              # Test framework
-│   │   │   │   ├── generator/        # Expression generation logic
-│   │   │   │   │   ├── ExpressionGenerator.java
-│   │   │   │   │   ├── IExpressionGenerator.java
-│   │   │   │   ├── DataTypeTest.java
-│   │   │   │   ├── MathExpressionTest.java
-│   │   │   │   ├── MemoryTest.java
-│   │   │   │   ├── SpeedTest.java
-│   │   │   │   ├── VariableTest.java
-│   │   │   │   └── VectorTest.java
-│   │   │   ├── util/                 # Utility classes
-│   │   │   │   ├── Logger.java
-│   │   │   │   ├── MathTestUtil.java
-│   │   │   │   └── Orchestrator.java
-│   │   ├── Main.java                 # Entry point for running tests
-├── resources/                        # Configuration or sample data
-└── test/                             # Unit test files
+│   │   └── org.parser.evaluator/
+│   │       ├── strategies/                     # Library-specific parsers and evaluators
+│   │       │   ├── EvalEx/
+│   │       │   │   ├── EvalEx.java
+│   │       │   │   ├── FactorialFunction.java
+│   │       │   │   └── FactorialOperator.java
+│   │       │   ├── Exp4j/
+│   │       │   │   └── Exp4j.java
+│   │       │   ├── Expr4j/
+│   │       │   │   └── Expr4j.java
+│   │       │   ├── JavaMathExpressionParser/
+│   │       │   │   └── JavaMathExpressionParser.java
+│   │       │   ├── Paralithic/
+│   │       │   │   └── Paralithic.java
+│   │       │   └── IParser.java                # Interface for parser strategies
+│   │       ├── testers/                        # Testing framework
+│   │       │   ├── extensibility/              # Tests for extensibility
+│   │       │   │   ├── ExtensibilityTest.java
+│   │       │   │   └── VariableTest.java
+│   │       │   ├── generator/                  # Expression generation logic
+│   │       │   │   ├── ExpressionGenerator.java
+│   │       │   │   └── IExpressionGenerator.java
+│   │       │   ├── mathematical/               # Tests for mathematical correctness
+│   │       │   │   ├── DataTypeTest.java
+│   │       │   │   └── MathExpressionTest.java
+│   │       │   ├── performance/                # Performance testing
+│   │       │   │   ├── MemoryTest.java
+│   │       │   │   └── SpeedTest.java
+│   │       │   └── Test.java                   # Base test class
+│   │       ├── util/                           # Utility classes
+│   │       │   ├── log/
+│   │       │   │   ├── report/                 # Reporting utilities
+│   │       │   │   │   ├── GeneralRecorder.java
+│   │       │   │   │   ├── LogContext.java
+│   │       │   │   │   ├── TableReporter.java
+│   │       │   │   │   └── OutputHandler.java
+│   │       │   └── Orchestrator.java           # Orchestrates test runs
+│   │       └── Main.java                       # Entry point for running tests
+├── resources/                                  # Configuration files or sample data
+└── test/                                       # Unit tests
+    └── java/
+        └── ExpressionGeneratorTest.java        # Test for expression generator
+
 ```
 
 ---
