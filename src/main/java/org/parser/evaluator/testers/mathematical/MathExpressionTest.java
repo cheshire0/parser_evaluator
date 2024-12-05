@@ -27,6 +27,7 @@ public class MathExpressionTest extends Test {
     // Logarithmic expressions and their expected results
     private final Map<String, Double> logarithmicExpressions = Map.of(
             "log(10)", 2.3025850929940456840179914546844, // Natural log
+            "log(10.0)", 1.0,
             "log2(4)", 2.0,
             "log10(100)", 2.0,
             "ln(2.718281828459045)", 1.0,    // Natural log, commonly 'ln'

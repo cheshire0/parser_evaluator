@@ -71,7 +71,6 @@ public class VariableTest extends Test {
      */
     @Override
     public Object testParser(IParser parser) {
-        OutputHandler.log("Testing parser: " + parser);
         int numberOfTests = variableExpressions.size();  // Total number of tests to run
         double passedTests = 0;  // Counter for the number of tests passed
 

@@ -2,6 +2,7 @@ package org.parser.evaluator;
 
 import org.parser.evaluator.strategies.IParser;
 import org.parser.evaluator.testers.Test;
+import org.parser.evaluator.util.log.OutputHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class Orchestrator {
 
         // Loop through all the tests
         for (Test test : tests) {
+            OutputHandler.log("---------"+test+"---------\n");
 
             // Set the parsers for the current test
             test.setParsers(parsers);
