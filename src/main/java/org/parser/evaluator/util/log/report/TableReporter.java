@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import static org.parser.evaluator.util.log.report.GeneralRecorder.getCurrentTimeString;
+import static org.parser.evaluator.util.log.report.GeneralRecorder.makeFolder;
 
 public class TableReporter {
 
@@ -14,32 +15,10 @@ public class TableReporter {
     // The folder where the report file will be stored
     protected File folder = null;
 
-    // Parent folder path where the results will be saved
-    protected final String parentFolderPath = "C:\\Users\\sebok\\IdeaProjects\\parser_evaluator\\table res";
-
     // Constructor initializes the reporter and creates the folder for storing the reports
-    public TableReporter(){
-        // Generate a unique folder name based on the current timestamp
-        String newFolderName = getCurrentTimeString("yyyy-MM-dd_HH-mm-ss");
-
-        // Combine the parent folder path with the new folder name to create the full path
-        File newFolder = new File(parentFolderPath, newFolderName);
-
-        // Attempt to create the folder at the specified path
-        if (newFolder.mkdirs()) {
-            System.out.println("Folder created successfully: " + newFolder.getAbsolutePath());
-        } else {
-            System.out.println("Failed to create folder.");
-        }
-
+    public TableReporter() {
         // Set the folder field to the new folder
-        folder = new File(newFolder.getAbsolutePath());
-
-        // Check if the folder was successfully created
-        if (!folder.exists()) {
-            throw new RuntimeException("Folder " + newFolder.getAbsolutePath() + " does not exist");
-        }
-
+        folder = makeFolder(System.getProperty("user.dir") + "\\table_res", getCurrentTimeString("yyyy-MM-dd_HH-mm-ss"));
         setFile("default");
     }
 
