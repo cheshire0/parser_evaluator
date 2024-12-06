@@ -1,7 +1,7 @@
 # **Parsing and Evaluating Mathematical Formulae in Java**
 
 ## **Overview**
-This repository contains the code and framework developed as part of a thesis project aimed at comparing open-source Java libraries for parsing and evaluating mathematical expressions. The project focuses on analyzing the capabilities, strengths, and limitations of these libraries to provide actionable recommendations for developers based on their specific use cases.
+This repository contains the code and framework developed as part of a thesis project aimed at comparing open-source Java libraries for parsing and evaluating mathematical expressions. The project focuses on analyzing the capabilities, strengths, and limitations of these libraries.
 
 ---
 
@@ -38,13 +38,9 @@ The framework evaluates libraries based on the following attributes:
 
 ## **Example Use Cases**
 The framework provides recommendations tailored to specific scenarios, such as:  
-- **Performance-Oriented Tasks**: Selecting the fastest library for real-time evaluations.  
+- **Performance-Oriented Tasks**: Selecting the fastest or most memory efficient library for real-time evaluations.  
 - **Customization Needs**: Identifying libraries that support user-defined operators or functions.  
-- **Correctness of Evaluation**: Recommending tools suitable for developers with minimal prior experience in formula parsing.
-
----
-
-Here’s a revised and polished version of the **Getting Started** section:
+- **Correctness of Evaluation**: Finding the most versatile libraries, that comply with standard operator precedence and return accurate results.
 
 ---
 
